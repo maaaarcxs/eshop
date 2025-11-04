@@ -1,0 +1,42 @@
+/* стилизация navbar */
+
+*{
+    background-color: black;
+    color: white;
+    font-family: "Montserrat";
+    text-decoration: none;
+}
+
+.products{
+
+
+
+    img{
+        max-width: 450px;
+        width: 100%;
+    }
+
+    button{
+        padding: 5px;
+        border-radius: 4px;
+    }
+}
+
+.item-detail{
+    margin-left: 600px;
+
+    img{
+        max-width: 450px;
+        width: 100%;
+        border-radius: 6px;
+    }
+    p{
+        max-width: 450px;
+        width: 100%;
+    }
+
+    button{
+        padding: 5px;
+        border-radius: 4px;
+    }
+}

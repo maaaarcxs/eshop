@@ -1,0 +1,20 @@
+{% load static %}
+
+
+<header>
+
+    <div class="navbar">
+        <nav>
+            <a href="{% url 'items_list' %}">
+                <img src="{% static "svg/home.svg" %}" alt="">
+            </a>
+            <a href="{% url "cart" %}">
+                <img src="{% static "svg/cart.svg" %}" alt="">
+            </a>
+            <a href="{% url "register" %}">
+                <img src="{% static "svg/account.svg" %}" alt="">
+            </a>
+        </nav>
+    </div>
+
+</header>

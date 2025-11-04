@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}{{ item.brand.name }} {{ item.model }}{% endblock %}
+{% block header %}{{ item.brand.name }} {{ item.model }}{% endblock %}
+
+{% block fields %}
+
+<div class="item-detail">
+    <img src="{{ item.photo.url }}" alt="{{ item.model }}">
+    <p>Бренд: {{ item.brand.name }}</p>
+    <p>Категория: {{ item.category.name }}</p>
+    <p>Цена: {{ item.price }} ₽</p>
+    <p>{{ item.description }}</p>
+    {% if item.stock %}
+    <form action="{% url 'add_to_cart' item.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">Добавить в корзину</button>
+    </form>
+    {% else %}
+    <p class="out-of-stock">Нет в наличии</p>
+    {% endif %}
+</div>
+
+<a href="{% url 'items_list' %}">← Вернуться к товарам</a>
+
+{% endblock %}
