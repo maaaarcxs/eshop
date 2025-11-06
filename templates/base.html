@@ -1,37 +1,26 @@
 {% load static %}
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% include "components/navbar.html" %}
-    <title>{% block title %}{% endblock  %}</title>
+    <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
-    
-    <h1>{% block header %}{% endblock  %}</h1>
+    <h1>{% block header %}{% endblock %}</h1>
 
-    <form action="" method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+    <div class="container">
         {% block fields %}
-        
-
-            <div class="container">
-            
-                {% block content %}{% endblock content %} 
-
-            </div>
-
+            {% block content %}{% endblock content %}
         {% endblock %}
-    </form>
+    </div>
 
     {% include "components/footer.html" %}
-
 </body>
 </html>
