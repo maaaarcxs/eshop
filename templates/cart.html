@@ -26,9 +26,9 @@
         {% for item in items %}
         <tr>
             <td>{{ item.product.brand.name }} {{ item.product.model }}</td>
-            <td>{{ item.product.price }} ₽</td>
+            <td>${{ item.price }} </td>
             <td>{{ item.quantity }}</td>
-            <td>{{ item.total_price }} ₽</td>
+            <td>${{ item.total_price }} </td>
             <td>
                 <form action="{% url 'update_cart_item' item.product.id %}" method="POST" style="display:inline">
                     {% csrf_token %}

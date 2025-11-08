@@ -97,8 +97,11 @@ class AddToCartView(View):
         item, created = CartItem.objects.get_or_create(cart=cart, product=product)
         if not created:
             item.quantity += 1
+            item.save()
+            messages.success(request, f"Количество товара '{product.model}' увеличено.")
         else:
             item.quantity = 1
+            item.price = product.price
             item.save()
             messages.success(request, f"Товар '{product.model}' добавлен в корзину.")
         return redirect("cart")
