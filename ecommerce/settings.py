@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-0g-xcc4or4+yxb4u&l2dhw)s=tglu!58!7j9ii14kke4!8l-&+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['eecommerceee.pythonanywhere.com']
+ALLOWED_HOSTS = ['eecommerceee.pythonanywhere.com', '127.0.0.1']
 
 
 # Application definition
