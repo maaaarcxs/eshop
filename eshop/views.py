@@ -5,29 +5,59 @@ from django.views.generic import ListView
 from django.contrib import messages
 
 
+# def get_cart(request):
+#         if request.user.is_authenticated:
+#             cart, created = Cart.objects.get_or_create(user=request.user)
+#             session_key = request.session.session_key
+#         if session_key:
+#             session_cart = Cart.objects.filter(session_key=session_key).first()
+#         if session_cart:
+#             for item in session_cart.items.all():
+#                 cart_item, created = CartItem.objects.get_or_create(cart=cart, product=item.product)
+#                 if not created:
+#                     cart_item.quantity += item.quantity
+#                 else:
+#                     cart_item.quantity = item.quantity
+#                     cart_item.save()
+#                     session_cart.delete()
+#                 return cart
+#         else:
+#             session_key = request.session.session_key
+#         if not session_key:
+#             request.session.create()
+#             session_key = request.session.session_key
+#             cart, created = Cart.objects.get_or_create(session_key=session_key)
+#         return cart
+
+
 def get_cart(request):
-        if request.user.is_authenticated:
-            cart, created = Cart.objects.get_or_create(user=request.user)
-            session_key = request.session.session_key
+    if request.user.is_authenticated:
+        cart, _ = Cart.objects.get_or_create(user=request.user)
+        session_key = request.session.session_key
         if session_key:
             session_cart = Cart.objects.filter(session_key=session_key).first()
-        if session_cart:
-            for item in session_cart.items.all():
-                cart_item, created = CartItem.objects.get_or_create(cart=cart, product=item.product)
-                if not created:
-                    cart_item.quantity += item.quantity
-                else:
-                    cart_item.quantity = item.quantity
-                    cart_item.save()
-                    session_cart.delete()
-                return cart
-        else:
-            session_key = request.session.session_key
-        if not session_key:
-            request.session.create()
-            session_key = request.session.session_key
-            cart, created = Cart.objects.get_or_create(session_key=session_key)
+            if session_cart:
+                for item in session_cart.items.all():
+                    cart_item, created = CartItem.objects.get_or_create(
+                        cart=cart,
+                        product=item.product,
+                        defaults={'price': item.price, 'quantity': item.quantity}
+                    )
+                    if not created:
+                        cart_item.quantity += item.quantity
+                        cart_item.save()
+                session_cart.delete()
         return cart
+
+    session_key = request.session.session_key
+    if not session_key:
+        request.session.create()
+        session_key = request.session.session_key
+
+    cart, _ = Cart.objects.get_or_create(session_key=session_key)
+    return cart
+
+
 
 
 class ItemListView(ListView):
@@ -58,29 +88,6 @@ class ItemListView(ListView):
         context["search_query"] = self.request.GET.get("q")
         return context
 
-    # def get_cart(request):
-    #     if request.user.is_authenticated:
-    #         cart, created = Cart.objects.get_or_create(user=request.user)
-    #         session_key = request.session.session_key
-    #     if session_key:
-    #         session_cart = Cart.objects.filter(session_key=session_key).first()
-    #     if session_cart:
-    #         for item in session_cart.items.all():
-    #             cart_item, created = CartItem.objects.get_or_create(cart=cart, product=item.product)
-    #             if not created:
-    #                 cart_item.quantity += item.quantity
-    #             else:
-    #                 cart_item.quantity = item.quantity
-    #                 cart_item.save()
-    #                 session_cart.delete()
-    #             return cart
-    #     else:
-    #         session_key = request.session.session_key
-    #     if not session_key:
-    #         request.session.create()
-    #         session_key = request.session.session_key
-    #         cart, created = Cart.objects.get_or_create(session_key=session_key)
-    #     return cart
 
 class CartView(View):
     def get(self, request):
@@ -92,8 +99,8 @@ class CartView(View):
 
 class AddToCartView(View):
     def post(self, request, item_id):
-        cart = get_cart(request)
-        product = get_object_or_404(Item, id=item_id)
+        cart: Cart = get_cart(request)
+        product: Item = get_object_or_404(Item, id=item_id)
         item, created = CartItem.objects.get_or_create(cart=cart, product=product)
         if not created:
             item.quantity += 1
@@ -104,7 +111,7 @@ class AddToCartView(View):
             item.price = product.price
             item.save()
             messages.success(request, f"Товар '{product.model}' добавлен в корзину.")
-        return redirect("cart")
+
 
 class RemoveFromCartView(View):
     def post(self, request, item_id):
